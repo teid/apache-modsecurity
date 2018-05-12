@@ -44,7 +44,7 @@ To try the container, use the following command. It will start the container wit
     -v /run/apache2 \
     -e WAF_MOD=detect \
     --read-only \
-    apache-modsecurity
+    teid/apache-modsecurity
 
 You can then use it with your applications, SSL and enabled modsecurity engine:
 
@@ -57,4 +57,4 @@ You can then use it with your applications, SSL and enabled modsecurity engine:
     -v /etc/my-certs:/my-certs \
     -e WAF_MOD=block \
     --read-only \
-    apache-modsecurity
+    teid/apache-modsecurity
