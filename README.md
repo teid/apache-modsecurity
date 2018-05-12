@@ -37,9 +37,10 @@ You can override the rules by changing the following files:
 Usage
 -----
 
-To try the container, use the following command. It will start the container with a static page where you can try to execute some malicious requests (like: `http://localhost/?q=%27%20OR%20%271%27=%271`):
+To try the container, use the following command. It will start the container with a static page where you can try to execute some malicious requests (like: <http://localhost/?q=%27%20OR%20%271%27=%271>):
 
-    docker run -d \
+    docker run \
+    --rm --name apache-modsecurity \
     -p 80:80 \
     -v /run/apache2 \
     -e WAF_MOD=detect \
@@ -48,9 +49,10 @@ To try the container, use the following command. It will start the container wit
 
 You can then use it with your applications, SSL and enabled modsecurity engine:
 
-    docker run -d \
+    docker run \
+    --rm --name apache-modsecurity \
     -p 80:80 \
-    -p 443 \
+    -p 443:443 \
     -v /run/apache2 \
     -v /var/www/html:/my-apps-docs
     -v /etc/apache2/sites-enabled:/my-apps-conf \
