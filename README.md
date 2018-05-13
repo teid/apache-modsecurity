@@ -5,7 +5,7 @@ A Docker image running [Apache2](https://httpd.apache.org/) with [Modsecurity](h
 
 It allows you to serve your application behind a WAF
 
-*This image is able to run with a read-only filesystem with an unpriviledged user (`www-data`)*
+*This image is able to run with a read-only filesystem.*
 
 Interfaces
 ----------

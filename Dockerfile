@@ -8,7 +8,6 @@ RUN apt-get update \
         apache2 \
         modsecurity-crs \
         libapache2-mod-security2 \
-        libcap2-bin \
     && rm -r /var/lib/apt/lists/*
 
 # Add default apache conf
@@ -21,6 +20,8 @@ ADD conf/apache/security2.conf /etc/apache2/mods-available/security2.conf
 ENV WAF_MOD="detect"
 RUN cat /etc/modsecurity/modsecurity.conf-recommended \
     | sed 's#^SecAuditLog .*#SecAuditLog /dev/stdout#g' \
+    | sed 's#^SecDataDir .*#SecDataDir /run/apache2/modsecurity/data#g' \
+    | sed 's#^SecTmpDir .*#SecTmpDir /run/apache2/modsecurity/tmp#g' \
     | sed 's/^SecAuditEngine .*/SecAuditEngine Off/g' \
     > /etc/modsecurity/modsecurity-detect.conf
 RUN cat /etc/modsecurity/modsecurity-detect.conf \
@@ -37,14 +38,10 @@ RUN rm /etc/apache2/sites-enabled/*
 ADD conf/apache/default-site.conf /etc/apache2/sites-enabled/default.conf
 VOLUME /etc/apache2/sites-enabled/
 
-# Allow apache to bind on registered ports (80 and 443) as non root user
-RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/sbin/apache2
-
 EXPOSE 80
 EXPOSE 443
 
 # Add the start script
 ADD run.sh /run.sh
-RUN chmod 555 /run.sh
-USER www-data
+RUN chmod 500 /run.sh
 CMD [ "/run.sh" ]
