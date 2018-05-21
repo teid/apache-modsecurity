@@ -32,6 +32,7 @@ RUN cat /etc/modsecurity/modsecurity-detect.conf \
 RUN mkdir -p /run/apache2
 RUN chown -R www-data:www-data /run/apache2
 VOLUME /run/apache2
+VOLUME /tmp
 
 # Site volume
 RUN rm /etc/apache2/sites-enabled/*
