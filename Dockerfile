@@ -23,6 +23,8 @@ RUN cat /etc/modsecurity/modsecurity.conf-recommended \
     | sed 's#^SecTmpDir .*#SecTmpDir /run/apache2/modsecurity/tmp#g' \
     | sed 's#^SecAuditEngine .*#SecAuditEngine Off#g' \
     > /etc/modsecurity/modsecurity.conf
+RUN mkdir /etc/modsecurity/rules.pre
+RUN mkdir /etc/modsecurity/rules.post
 
 # Create the runtime volume
 RUN mkdir -p /run/apache2

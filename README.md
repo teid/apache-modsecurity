@@ -29,10 +29,20 @@ To enable the engine, set the `MODSEC_SecRuleEngine` environment variable to `On
 
 The [recommanded rules](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-%28v2.x%29#a-recommended-base-configuration) are used by default with some ajustments to fit in the docker environment.
 
-You can override the rules by changing the following files:
+You can override the rules by adding a configuration file in those folders:
 
-* `/etc/modsecurity/modsecurity-detect.conf` (used if the container is in detection mod)
-* `/etc/modsecurity/modsecurity-block.conf` (used if the container is configured to block the suspicious requests)
+* `/etc/modsecurity/rules.pre` (Configurations imported before the default one)
+* `/etc/modsecurity/rules.post` (Configuration imported after the default one)
+
+For instance you can bypass a rule for a specific path
+
+```apacheconf
+# /etc/modsecurity/rules.post/app-ignore-sqlinj.conf
+<LocationMatch "^/app/">
+    # Ignore SQLInj in /app/*
+    SecRuleRemoveById 942100
+</LocationMatch>
+```
 
 Usage
 -----
