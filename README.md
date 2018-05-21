@@ -25,7 +25,7 @@ Configuration
 
 By default, to prevent any disruptive beharior, the [Modsecurity engine](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-%28v2.x%29#SecRuleEngine) does not take any action upon suspicious requests. So does this image.
 
-To enable the engine, set the `WAF_MOD` environment variable to `block`.
+To enable the engine, set the `MODSEC_SecRuleEngine` environment variable to `On`.
 
 The [recommanded rules](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual-%28v2.x%29#a-recommended-base-configuration) are used by default with some ajustments to fit in the docker environment.
 
@@ -43,7 +43,6 @@ To try the container, use the following command. It will start the container wit
     --rm --name apache-modsecurity \
     -p 80:80 \
     -v /run/apache2 \
-    -e WAF_MOD=detect \
     --read-only \
     teid/apache-modsecurity
 
@@ -57,6 +56,6 @@ You can then use it with your applications, SSL and enabled modsecurity engine:
     -v /var/www/html:/my-apps-docs
     -v /etc/apache2/sites-enabled:/my-apps-conf \
     -v /etc/my-certs:/my-certs \
-    -e WAF_MOD=block \
+    -e MODSEC_SecRuleEngine=On \
     --read-only \
     teid/apache-modsecurity

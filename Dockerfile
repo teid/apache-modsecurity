@@ -12,21 +12,17 @@ RUN apt-get update \
 
 # Add default apache conf
 ADD conf/apache/apache2.conf /etc/apache2/apache2.conf
-
-# Add Apache modsecurity module conf
 ADD conf/apache/security2.conf /etc/apache2/mods-available/security2.conf
 
 # Add the WAF conf
-ENV WAF_MOD="detect"
+ENV MODSEC_SecRuleEngine="DetectionOnly"
 RUN cat /etc/modsecurity/modsecurity.conf-recommended \
+    | sed 's#^SecRuleEngine .*#SecRuleEngine ${MODSEC_SecRuleEngine}#g' \
     | sed 's#^SecAuditLog .*#SecAuditLog /dev/stdout#g' \
     | sed 's#^SecDataDir .*#SecDataDir /run/apache2/modsecurity/data#g' \
     | sed 's#^SecTmpDir .*#SecTmpDir /run/apache2/modsecurity/tmp#g' \
-    | sed 's/^SecAuditEngine .*/SecAuditEngine Off/g' \
-    > /etc/modsecurity/modsecurity-detect.conf
-RUN cat /etc/modsecurity/modsecurity-detect.conf \
-    | sed 's/^SecRuleEngine .*/SecRuleEngine On/g' \
-    > /etc/modsecurity/modsecurity-block.conf
+    | sed 's#^SecAuditEngine .*#SecAuditEngine Off#g' \
+    > /etc/modsecurity/modsecurity.conf
 
 # Create the runtime volume
 RUN mkdir -p /run/apache2
